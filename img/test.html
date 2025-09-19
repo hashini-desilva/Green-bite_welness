@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenBite - Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: #4CAF50;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 70%;
+        }
+        
+        .nav-link {
+            list-style: none;
+            position: relative;
+        }
+        
+        .nav-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-link a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            width: 200px;
+            padding: 10px;
+            z-index: 100;
+            display: none;
+        }
+        
+        .dropdown-link {
+            margin: 10px 0;
+            list-style: none;
+        }
+        
+        .dropdown-link a {
+            color: #333;
+            padding: 8px 12px;
+        }
+        
+        .nav-link:hover .dropdown {
+            display: block;
+        }
+        
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+                z-index: 1001;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                transition: right 0.5s ease;
+                padding: 80px 30px 30px;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                overflow-y: auto;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-link {
+                width: 100%;
+                margin: 10px 0;
+            }
+            
+            .nav-link a {
+                padding: 15px;
+                width: 100%;
+            }
+            
+            .dropdown {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                background-color: rgba(255, 255, 255, 0.1);
+                display: none;
+                margin-top: 10px;
+            }
+            
+            .dropdown.active {
+                display: block;
+            }
+            
+            .dropdown-link a {
+                color: #e0e0e0;
+            }
+            
+            /* Hamburger animation */
+            .hamburger.active div:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 8px);
+            }
+            
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active div:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -8px);
+            }
+            
+            /* Close button */
+            .close-btn {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                color: white;
+                font-size: 1.8rem;
+                cursor: pointer;
+                display: block;
+            }
+        }
+        
+        /* Hide close button on desktop */
+        .close-btn {
+            display: none;
+        }
+        
+        /* Content Sections */
+        section {
+            padding: 30px 0;
+        }
+        
+        .calculator-intro, .metabolic-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .calculator-intro h2, .metabolic-section h1 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .calculator-intro ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .calculator-intro li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        /* Calculator */
+        .calculator {
+            padding: 20px 15px;
+        }
+        
+        .calc-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calc-box h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3e8e41;
+        }
+        
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .results h3, .results h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .progress {
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress div {
+            height: 100%;
+            border-radius: 10px;
+        }
+        
+        #carbsBar {
+            background-color: #FF6384;
+            width: 50%;
+        }
+        
+        #proteinBar {
+            background-color: #36A2EB;
+            width: 30%;
+        }
+        
+        #fatBar {
+            background-color: #FFCD56;
+            width: 20%;
+        }
+        
+        /* Testimonial */
+        .Testimonial {
+            padding: 20px 15px;
+        }
+        
+        .quote-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quote-box img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .quote-wrap h1 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .quote-wrap span {
+            color: #777;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 15px 15px;
+        }
+        
+        .footer-widget {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .about-widget, .links-widget, .recent-widget, .contact-widget {
+            margin-bottom: 30px;
+        }
+        
+        footer h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .social-widget {
+            margin-top: 15px;
+        }
+        
+        .social-widget a {
+            color: white;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .links-widget ul, .recent-widget ul {
+            list-style: none;
+        }
+        
+        .links-widget li, .recent-widget li {
+            margin-bottom: 10px;
+        }
+        
+        .links-widget a {
+            color: #ddd;
+            text-decoration: none;
+        }
+        
+        .links-widget a:hover {
+            color: white;
+        }
+        
+        .contact-widget form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .contact-widget input[type="email"] {
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .contact-widget input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .footer-menu {
+            border-top: 1px solid #3a506b;
+            padding: 15px 0;
+            margin-bottom: 15px;
+        }
+        
+        .footer-menu ul {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+        
+        .footer-menu li {
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .footer-menu a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-credit {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Media Queries for Larger Screens */
+        @media (min-width: 768px) {
+            .footer-widget {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            
+            .about-widget {
+                flex: 0 0 100%;
+            }
+            
+            .links-widget, .recent-widget, .contact-widget {
+                flex: 0 0 48%;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .about-widget {
+                flex: 0 0 48%;
+            }
+            
+            .links-widget, .recent-widget {
+                flex: 0 0 23%;
+            }
+            
+            .contact-widget {
+                flex: 0 0 48%;
+            }
+        }
+    </style>
+</head>
+<body class="calculatorContainer">
+    <!-- Header with Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-leaf"></i> GreenBite
+                </a>
+                <div class="hamburger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+                <ul class="nav-links">
+                    <button class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <li class="nav-link" style="--i: 1.35s"><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li class="nav-link" style="--i: 1.35s"><a href="Recipie.html"><i class="fas fa-utensils"></i> Recipes</a></li>
+                    <li class="nav-link" style="--i: .6s"><a href="Calculator.html"><i class="fas fa-calculator"></i> Calculator</a></li>
+                    
+                    <li class="nav-link" style="--i: 1.1s">
+                        <a href="#"><i class="fas fa-dumbbell"></i> Workouts <i class="fas fa-caret-down"></i></a>
+                        <div class="dropdown">
+                            <ul>
+                                <li class="dropdown-link"><a href="Body parts.html"><i class="fas fa-running"></i> Body parts</a></li>
+                                <li class="dropdown-link"><a href="Equipment.html"><i class="fas fa-toolbox"></i> Gear Needed</a></li>
+                                <div class="arrow"></div>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-link" style="--i: 1.35s"><a href="Mindfulness.html"><i class="fas fa-spa"></i> Mindfulness </a></li>
+                    <li class="nav-link" style="--i: 1.35s"><a href="Contact.html"><i class="fas fa-envelope"></i> Contact </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- =========================
+         Calculator Intro
+    ============================ -->
+    <section class="calculator-section">
+        <div class="calculator-intro">
+            <h2>Why Calculate Your BMR & TDEE?</h2>
+            <p>
+                Understanding your <strong>Basal Metabolic Rate (BMR)</strong> and 
+                <strong>Total Daily Energy Expenditure (TDEE)</strong> helps you know how much 
+                energy your body needs at rest and during daily activities.
+            </p>
+            <ul>
+                <li>Maintain a <b>healthy weight</b></li>
+                <li>Adjust calories for <b>weight loss or gain</b></li>
+                <li>Balance your <b>nutrition & lifestyle</b></li>
+                <li>Improve overall <b>health awareness</b></li>
+            </ul>
+            <p class="highlight">
+                💡 Small lifestyle changes can make a big difference in your wellbeing.  
+                Use the calculator below to discover your numbers and take control of your health!
+            </p>
+        </div>
+    </section>
+    
+    <section>
+        <div class="metabolic-section">
+            <h1>Unlock Your Metabolic Blueprint</h1>
+            <p>This headline is short, motivational, and connects directly to the purpose of the BMR & TDEE
+                 calculator—empowering users to understand their body's energy needs so they can make informed
+                  lifestyle choices.</p>
+        </div>
+    </section>
+
+    <!-- =========================
+         Calculator
+    ============================ -->
+    <section class="calculator">
+        <div class="calc-box">
+            <h2>Calorie & Nutrition Calculator</h2>
+            <form id="calcForm">
+                <label>Age (years):</label>
+                <input type="number" id="age" required>
+
+                <label>Gender:</label>
+                <select id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+
+                <label>Height (cm):</label>
+                <input type="number" id="height" required>
+
+                <label>Weight (kg):</label>
+                <input type="number" id="weight" required>
+
+                <label>Activity Level:</label>
+                <select id="activity">
+                    <option value="1.2">Sedentary (Little or no exercise)</option>
+                    <option value="1.375">Lightly active (1–3 days/week)</option>
+                    <option value="1.55">Moderately active (3–5 days/week)</option>
+                    <option value="1.725">Very active (6–7 days/week)</option>
+                    <option value="1.9">Super active (physical job)</option>
+                </select>
+
+                <button type="button" onclick="calculate()">Calculate</button>
+            </form>
+
+            <div id="results" class="results">
+                <h3>Your Results</h3>
+                <p><strong>BMR:</strong> <span id="bmr"></span> kcal/day</p>
+                <p><strong>TDEE:</strong> <span id="tdee"></span> kcal/day</p>
+
+                <h4>Macronutrient Breakdown</h4>
+
+                <p>Carbs: <span id="carbs"></span> g</p>
+                <div class="progress">
+                    <div id="carbsBar"></div>
+                </div>
+
+                <p>Protein: <span id="protein"></span> g</p>
+                <div class="progress">
+                    <div id="proteinBar"></div>
+                </div>
+
+                <p>Fat: <span id="fat"></span> g</p>
+                <div class="progress">
+                    <div id="fatBar"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonial Quote Section -->
+    <section class="Testimonial">
+        <div class="quote-box">
+            <img src="https://placehold.co/80x80?text=RS" alt="Ravi S." />
+            <div class="quote-wrap">
+                <h1>Ravi S., 32, Colombo</h1>
+                <span>A committed GreenBite user</span>
+                <p>
+                    "I had no idea how much my daily habits were affecting my energy levels until I used this calculator. 
+                    It gave me a clear picture of my BMR and TDEE, and helped me adjust my calorie intake to match my
+                    fitness goals. Within weeks, I felt more energized and started seeing real progress. It's like having 
+                    a personal nutritionist in your pocket!"
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- =======================================
+         Footer 
+    ========================================= -->
+    <footer>
+        <div class="footer-widget">
+            <!-- About -->
+            <div class="about-widget">
+                <h3>About GreenBite</h3>
+                <p>Our mission is to make wellness simple, practical, and enjoyable—whether you're starting your fitness 
+                    journey, exploring clean eating, building daily mindfulness habits. With GreenBite, small steps 
+                    lead to big changes for a healthier, happier you🌱💚</p>
+                <div class="social-widget">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="links-widget">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="recipes.html">Healthy Recipes</a></li>
+                    <li><a href="workouts.html">Workout Plans</a></li>
+                    <li><a href="mindfulness.html">Mindfulness</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Recent Highlights -->
+            <div class="recent-widget">
+                <h3>Wellness Highlights</h3>
+                <ul>
+                    <li>🌿 Daily Health Tip</li>
+                    <li>🥗 Fresh Recipes</li>
+                    <li>🧘 Guided Meditation</li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="contact-widget">
+                <h3>Newsletter</h3>
+                <p>Subscribe to get daily wellness tips</p>
+                <form id="newsletterForm">
+                    <input type="email" id="emailInput" placeholder="Enter your email" required>
+                    <input type="submit" value="Subscribe">
+                </form>
+                <p id="subscriptionMsg"></p>
+            </div>
+        </div>
+
+        <!-- Footer Menu -->
+        <div class="footer-menu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="recipes.html">Recipes</a></li>
+                <li><a href="calculator.html">Nutrition Calculator</a></li>
+                <li><a href="workouts.html">Workouts</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Credits -->
+        <div class="footer-credit">
+            <p>&copy; 2025 GreenBite Wellness | Designed with ❤️ for a healthier future</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const closeBtn = document.querySelector('.close-btn');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            hamburger.classList.remove(
+                
+            'active');
+        });
+        
+        // Mobile dropdown menu functionality
+        const dropdownToggles = document.querySelectorAll('.nav-link > a');
+        
+        dropdownToggles.forEach(toggle => {
+            if (toggle.nextElementSibling && toggle.nextElementSibling.classList.contains('dropdown')) {
+                toggle.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768) {
+                        e.preventDefault();
+                        toggle.nextElementSibling.classList.toggle('active');
+                    }
+                });
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth < 768) {
+                if (!e.target.matches('.nav-link > a')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            }
+        });
+        
+        // Calculator function
+        function calculate() {
+            // Get input values
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const height = parseInt(document.getElementById('height').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            
+            // Validate inputs
+            if (!age || !height || !weight) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+            
+            // Calculate BMR (Mifflin-St Jeor Equation)
+            let bmr;
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+            
+            // Calculate TDEE
+            const tdee = bmr * activity;
+            
+            // Calculate macronutrients (40% carbs, 30% protein, 30% fat)
+            const carbs = Math.round((tdee * 0.4) / 4); // 4 calories per gram of carbs
+            const protein = Math.round((tdee * 0.3) / 4); // 4 calories per gram of protein
+            const fat = Math.round((tdee * 0.3) / 9); // 9 calories per gram of fat
+            
+            // Display results
+            document.getElementById('bmr').textContent = Math.round(bmr);
+            document.getElementById('tdee').textContent = Math.round(tdee);
+            document.getElementById('carbs').textContent = carbs;
+            document.getElementById('protein').textContent = protein;
+            document.getElementById('fat').textContent = fat;
+            
+            // Update progress bars
+            document.getElementById('carbsBar').style.width = '50%';
+            document.getElementById('proteinBar').style.width = '30%';
+            document.getElementById('fatBar').style.width = '20%';
+            
+            // Show results with animation
+            const results = document.getElementById('results');
+            results.style.display = 'block';
+            results.scrollIntoView({ behavior: 'smooth' });
+            
+            // Save to localStorage
+            const userData = {
+                age, gender, height, weight, activity,
+                bmr: Math.round(bmr),
+                tdee: Math.round(tdee),
+                carbs, protein, fat,
+                lastCalculated: new Date().toISOString()
+            };
+            localStorage.setItem('greenbiteCalculatorData', JSON.stringify(userData));
+        }
+        
+        // Newsletter form submission
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            
+            // Validate email
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('subscriptionMsg').textContent = "Please enter a valid email address.";
+                document.getElementById('subscriptionMsg').style.color = "red";
+                return;
+            }
+            
+            // Save to localStorage
+            let subscriptions = JSON.parse(localStorage.getItem('greenbiteNewsletterSubscriptions') || '[]');
+            if (!subscriptions.includes(email)) {
+                subscriptions.push(email);
+                localStorage.setItem('greenbiteNewsletterSubscriptions', JSON.stringify(subscriptions));
+            }
+            
+            document.getElementById('subscriptionMsg').textContent = `Thank you for subscribing with ${email}!`;
+            document.getElementById('subscriptionMsg').style.color = "white";
+            document.getElementById('emailInput').value = '';
+        });
+        
+        // Load previous data if available
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedData = localStorage.getItem('greenbiteCalculatorData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                document.getElementById('age').value = data.age;
+                document.getElementById('gender').value = data.gender;
+                document.getElementById('height').value = data.height;
+                document.getElementById('weight').value = data.weight;
+                document.getElementById('activity').value = data.activity;
+            }
+        });
+    </script>
+</body>
+</html>
+
+
