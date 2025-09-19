@@ -367,7 +367,7 @@ updateDisplay();
       const chosen = bodypartEl.value;
       localStorage.setItem("selectedBodyPart", chosen);
       // redirect only if equipment page exists
-      window.location.href = "equipment.html";
+      window.location.href = "Equipment.html";
     });
   }
 
