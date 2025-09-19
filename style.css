@@ -1699,25 +1699,21 @@ form button:hover {
 .progress-teaser h3 {
   font-size: 80px;
   margin-bottom: 20px;
-  color: #000206;
-  text-shadow: 0 0 30px #1e3cb5;
+  color: #ffffff;
+  
   position: relative;
   font-weight: bolder;
- 
-}
 
+}
 .progress-teaser p {
   font-size: 18px;
   line-height: 1.6;
   max-width: 850px;
   margin: 0 auto;
-  color: #000000;
+  color: #ffffff;
   position: relative;
   font-weight: bolder;
-  
 }
-
-
 .progress-teaser img {
   width: 100%;
   height: auto;
