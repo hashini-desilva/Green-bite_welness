@@ -567,6 +567,12 @@ Menu Ended
 /* ==============================
    Footer - GreenBite Wellness
 =============================== */
+
+.sr-only {
+  position: absolute;
+  left: -9999px;
+}
+
 footer {
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
     
@@ -667,7 +673,7 @@ footer {
 }
 .contact-widget input[type="submit"]:hover {
   background-color: transparent;
-  color: #8ec837;
+  color: #2d450a;
 }
 
 #subscriptionMsg {
@@ -1417,7 +1423,7 @@ form button:hover {
         }
         
         button {
-            background-color: var(--primary-color);
+            background-color: #4CAF50;
             color: white;
             border: none;
             padding: 0.8rem 1.5rem;
