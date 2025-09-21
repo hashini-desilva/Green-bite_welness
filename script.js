@@ -1,35 +1,32 @@
 //hamburger menue//
         // Mobile navigation toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        const closeBtn = document.querySelector('.close-btn');
-        
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        });
-        
-        if (closeBtn) {
-          closeBtn.addEventListener("click", () => {
-          navLinks.classList.remove("active");
-          hamburger.classList.remove("active");
-        });
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    });
+  }
+
+  // Mobile dropdown toggle
+  const dropdownToggles = document.querySelectorAll('.nav-link > a');
+
+  dropdownToggles.forEach(toggle => {
+    const dropdown = toggle.nextElementSibling;
+    if (dropdown && dropdown.classList.contains('dropdown')) {
+      toggle.addEventListener('click', (e) => {
+        if (window.innerWidth < 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
         }
-        
-        // Mobile dropdown menu functionality
-        const dropdownToggles = document.querySelectorAll('.nav-link > a');
-        
-        dropdownToggles.forEach(toggle => {
-            if (toggle.nextElementSibling && toggle.nextElementSibling.classList.contains('dropdown')) {
-                toggle.addEventListener('click', (e) => {
-                    if (window.innerWidth < 768) {
-                        e.preventDefault();
-                        toggle.nextElementSibling.classList.toggle('active');
-                    }
-                });
-            }
-        });
-        
+      });
+    }
+  });
+});
+
 // script.js (corrected)
 document.addEventListener("DOMContentLoaded", () => {
 
