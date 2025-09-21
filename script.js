@@ -468,3 +468,20 @@ soundButtons.forEach(button => {
       });
   });
 }
+document.addEventListener("DOMContentLoaded", () => {
+  // Modal references
+  const modal = document.getElementById("recipeModal");
+  const modalContent = document.querySelector(".modal-content");
+  
+
+  // Add this for click/touch outside
+  if (modal && modalContent) {
+    function closeModalOnOutside(e) {
+      if (!modalContent.contains(e.target)) {
+        modal.style.display = "none";
+      }
+    }
+    modal.addEventListener("click", closeModalOnOutside);
+    modal.addEventListener("touchstart", closeModalOnOutside); // for mobile
+  }
+});
