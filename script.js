@@ -30,18 +30,6 @@
             }
         });
         
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (window.innerWidth < 768) {
-                if (!e.target.matches('.nav-link > a')) {
-                    document.querySelectorAll('.dropdown').forEach(dropdown => {
-                        dropdown.classList.remove('active');
-                    });
-                }
-            }
-        });
-       
-
 // script.js (corrected)
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -442,12 +430,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Sound selector
-    function changeSound() {
-      const soundSelect = document.getElementById("sound-select");
-      const player = document.getElementById("sound-player");
-      player.src = soundSelect.value;
-      player.play();
-    }
+    
+    const soundPlayer = document.getElementById("sound-player");
+const soundButtons = document.querySelectorAll(".sound-btn");
+
+soundButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    // Change audio source
+    const soundFile = button.getAttribute("data-sound");
+    soundPlayer.src = soundFile;
+    soundPlayer.play();
+
+    // Update active button style
+    soundButtons.forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
+  });
+});
+
 
     // Log session
     document.querySelectorAll("button").forEach(btn => {
