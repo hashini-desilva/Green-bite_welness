@@ -994,14 +994,9 @@ footer {
       top: 10px;
       right: 25px;
       font-size: 35px;
-      font-weight: bold;
       cursor: pointer;
       color: red;
-       padding: 5px 10px;
     } 
-    .close-btn:hover {
-  color: #f00;
-}
 
     .nutrition-table {
       width: 100%;
