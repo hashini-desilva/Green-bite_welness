@@ -9,10 +9,12 @@
             hamburger.classList.toggle('active');
         });
         
-        closeBtn.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-            hamburger.classList.remove('active');
+        if (closeBtn) {
+          closeBtn.addEventListener("click", () => {
+          navLinks.classList.remove("active");
+          hamburger.classList.remove("active");
         });
+        }
         
         // Mobile dropdown menu functionality
         const dropdownToggles = document.querySelectorAll('.nav-link > a');
