@@ -917,6 +917,13 @@ footer {
       height: fit-content;
     }
 
+    @media (max-width: 360px) {
+  .filter-bar input,
+  .filter-bar select {
+    padding: 8px;
+    font-size: 0.9rem;
+    height: 40px;
+  }}
     .recipe-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
