@@ -18,21 +18,7 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "screenshots": [
-  {
-    "src": "img/screenshot-wide.png",
-    "sizes": "1280x720",
-    "type": "image/png",
-    "form_factor": "wide"
-  },
-  {
-    "src": "img/screenshot-mobile.png",
-    "sizes": "414x896",
-    "type": "image/png",
-    "form_factor": "narrow"
-  }
-]
+  ]
 
   
 }
